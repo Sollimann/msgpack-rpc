@@ -64,10 +64,11 @@ impl Message {
     where
         R: Read,
     {
-        // let msg = decode::value::read_value(rd)?;
-        let msg = decode::value::read_value_with_max_depth(rd, 1000000)?;
+        let msg = decode::value::read_value(rd)?;
+        println!("line 68");
         if let Value::Array(ref array) = msg {
             if array.len() < 3 {
+                println!("line 70");
                 // notification are the shortest message and have 3 items
                 return Err(DecodeError::Invalid);
             }
@@ -81,9 +82,11 @@ impl Message {
                     _ => Err(DecodeError::Invalid),
                 }
             } else {
+                println!("line 85");
                 Err(DecodeError::Invalid)
             }
         } else {
+            println!("line 89");
             Err(DecodeError::Invalid)
         }
     }
@@ -132,6 +135,7 @@ impl Message {
 
 impl Notification {
     fn decode(array: &[Value]) -> Result<Self, DecodeError> {
+        println!("notification decode");
         if array.len() < 3 {
             return Err(DecodeError::Invalid);
         }
@@ -157,6 +161,7 @@ impl Notification {
 
 impl Request {
     fn decode(array: &[Value]) -> Result<Self, DecodeError> {
+        println!("request deocde");
         if array.len() < 4 {
             return Err(DecodeError::Invalid);
         }
@@ -190,6 +195,7 @@ impl Request {
 
 impl Response {
     fn decode(array: &[Value]) -> Result<Self, DecodeError> {
+        println!("response decode!");
         if array.len() < 2 {
             return Err(DecodeError::Invalid);
         }
