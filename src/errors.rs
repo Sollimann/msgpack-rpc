@@ -9,6 +9,8 @@ pub enum DecodeError {
     /// A byte sequence could not be decoded as a msgpack value, or this value is not a valid
     /// msgpack-rpc message.
     Invalid,
+    /// The maximum recursion depth before [`Error::DepthLimitExceeded`] is returned.
+    DepthLimitExceeded,
     /// An unknown IO error while reading a byte sequence
     UnknownIo(io::Error),
 }
@@ -19,6 +21,9 @@ impl DecodeError {
             DecodeError::Truncated => "could not read enough bytes to decode a complete message",
             DecodeError::UnknownIo(_) => "Unknown IO error while decoding a message",
             DecodeError::Invalid => "the byte sequence is not a valid msgpack-rpc message",
+            DecodeError::DepthLimitExceeded => {
+                "The depth limit [`MAX_DEPTH`] of 1024 bytes were exceeded."
+            }
         }
     }
 }
@@ -68,6 +73,7 @@ impl From<decode::Error> for DecodeError {
             decode::Error::InvalidMarkerRead(io_err) | decode::Error::InvalidDataRead(io_err) => {
                 From::from(io_err)
             }
+            decode::Error::DepthLimitExceeded => DecodeError::DepthLimitExceeded,
         }
     }
 }

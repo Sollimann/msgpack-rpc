@@ -23,6 +23,7 @@ impl Decoder for Codec {
                     }
                     Err(err) => match err {
                         DecodeError::Truncated => return Ok(None),
+                        DecodeError::DepthLimitExceeded => return Ok(None), // Todo, consider replacing with `continue`
                         DecodeError::Invalid => continue,
                         DecodeError::UnknownIo(io_err) => {
                             res = Err(io_err);
