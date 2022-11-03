@@ -50,6 +50,7 @@ impl error::Error for DecodeError {
 
 impl From<io::Error> for DecodeError {
     fn from(err: io::Error) -> DecodeError {
+        log::error!("Got I/O error {err}");
         match err.kind() {
             io::ErrorKind::UnexpectedEof => DecodeError::Truncated(err),
             io::ErrorKind::Other => {
