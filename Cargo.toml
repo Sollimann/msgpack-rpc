@@ -1,0 +1,25 @@
+[package]
+authors = ["Kristoffer Solberg Rakstad <kristoffer.solberg@cognite.com>"]
+description = "a msgpack-rpc client and server based on tokio"
+homepage = "https://github.com/sollimann/msgpack-rpc"
+keywords = ["msgpack", "rpc", "msgpack-rpc"]
+license-file = "LICENSE-MIT"
+edition = "2021"
+name = "msgpack-rpc"
+readme = "README.md"
+repository = "https://github.com/sollimann/msgpack-rpc"
+rust-version = "1.60.0"
+version = "0.4.0"
+
+[dependencies]
+bytes = "1.0"
+futures = "0.3"
+log = "0.4"
+rmpv = "0.4"
+tokio = { version = "1.4", features = ["rt", "rt-multi-thread"] }
+tokio-util = { version = "0.6", features = ["codec", "compat"] }
+
+[dev-dependencies]
+env_logger = "0.8"
+chrono = "0.4"
+tokio = { version = "1.4", features = ["macros", "net", "time"] }
