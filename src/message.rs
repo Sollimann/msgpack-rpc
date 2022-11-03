@@ -64,7 +64,8 @@ impl Message {
     where
         R: Read,
     {
-        let msg = decode::value::read_value(rd)?;
+        // let msg = decode::value::read_value(rd)?;
+        let msg = decode::value::read_value_with_max_depth(rd, 1000000)?;
         if let Value::Array(ref array) = msg {
             if array.len() < 3 {
                 // notification are the shortest message and have 3 items
