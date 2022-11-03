@@ -22,7 +22,7 @@ impl Decoder for Codec {
                         break;
                     }
                     Err(err) => match err {
-                        DecodeError::Truncated => return Ok(None),
+                        DecodeError::Truncated(_) => return Ok(None),
                         DecodeError::DepthLimitExceeded => return Ok(None), // Todo, consider replacing with `continue`
                         DecodeError::Invalid => continue,
                         DecodeError::UnknownIo(io_err) => {

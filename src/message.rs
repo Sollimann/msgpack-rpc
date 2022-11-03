@@ -64,6 +64,7 @@ impl Message {
     where
         R: Read,
     {
+        println!("line 67");
         let msg = decode::value::read_value(rd)?;
         println!("line 68");
         if let Value::Array(ref array) = msg {
@@ -242,7 +243,7 @@ fn test_decode_request() {
         let mut buf = io::Cursor::new(&bytes);
         assert!(matches!(
             Message::decode(&mut buf),
-            Err(DecodeError::Truncated)
+            Err(DecodeError::Truncated(_))
         ));
     }
 

@@ -5,7 +5,7 @@ use std::{error, fmt, io};
 #[derive(Debug)]
 pub enum DecodeError {
     /// Some bytes are missing to decode a full msgpack value
-    Truncated,
+    Truncated(io::Error),
     /// A byte sequence could not be decoded as a msgpack value, or this value is not a valid
     /// msgpack-rpc message.
     Invalid,
@@ -18,7 +18,7 @@ pub enum DecodeError {
 impl DecodeError {
     fn description(&self) -> &str {
         match *self {
-            DecodeError::Truncated => "could not read enough bytes to decode a complete message",
+            DecodeError::Truncated(_) => "could not read enough bytes to decode a complete message",
             DecodeError::UnknownIo(_) => "Unknown IO error while decoding a message",
             DecodeError::Invalid => "the byte sequence is not a valid msgpack-rpc message",
             DecodeError::DepthLimitExceeded => {
@@ -42,6 +42,7 @@ impl error::Error for DecodeError {
     fn cause(&self) -> Option<&dyn error::Error> {
         match *self {
             DecodeError::UnknownIo(ref e) => Some(e),
+            DecodeError::Truncated(ref e) => Some(e),
             _ => None,
         }
     }
@@ -49,9 +50,8 @@ impl error::Error for DecodeError {
 
 impl From<io::Error> for DecodeError {
     fn from(err: io::Error) -> DecodeError {
-        println!("error kind {err:?}");
         match err.kind() {
-            io::ErrorKind::UnexpectedEof => DecodeError::Truncated,
+            io::ErrorKind::UnexpectedEof => DecodeError::Truncated(err),
             io::ErrorKind::Other => {
                 if let Some(cause) = err.get_ref().unwrap().source() {
                     // XXX Allocating here sucks, but `description` is deprecated :(
