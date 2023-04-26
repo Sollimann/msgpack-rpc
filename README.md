@@ -25,3 +25,4 @@ Examples
 - [client.rs](https://github.com/little-dude/rmp-rpc/blob/master/examples/client.rs): a simple client
 - [server.rs](https://github.com/little-dude/rmp-rpc/blob/master/examples/server.rs): a simple server
 - [Ping Pong](https://github.com/little-dude/rmp-rpc/blob/master/examples/ping_pong.rs): an example with endpoints that are both client and server.
+- [Airsim Client](https://github.com/Sollimann/airsim-client): a Rust client for Airsim using msgpack-rpc
